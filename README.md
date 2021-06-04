@@ -13,24 +13,9 @@ Regarding the number of applications for this Kotlin/JS extension, we may as wel
 
 This feature facilitates the writing of frontend web applications using Kotlin, as we are able to apply the same component reusability principles as in React, and also make use of its vast "ecosystem" of dependencies. What is expected of a developer who wants to implement such an application, is a basic knowledge of Kotlin, and little knowledge of HTML and CSS. "_Prior knowledge of the basic concepts behind React may be helpful in understanding some of the sample code, but is not strictly required._"
 
-## Set up project
+## Usage
 
-As a prerequisite for setting up a project, is to have the Intellij IDEA installed, along with the Kotlin plugin (version 14.3.0 or above).
-
-The specific project type that needs to be selected is the following:
-
-![image](https://user-images.githubusercontent.com/49645354/120811783-07484180-c555-11eb-9d60-085c0d938e2d.png)
-
-After its creation, we may as well edit the gradle configuration, by adding the required dependencies. As such, for developing an application in React, we would need the following:
-
-```java
-implementation("org.jetbrains:kotlin-react:17.0.1-pre.148-kotlin-1.4.21")
-implementation("org.jetbrains:kotlin-react-dom:17.0.1-pre.148-kotlin-1.4.21")
-
-implementation(npm("react", "17.0.1"))
-implementation(npm("react-dom", "17.0.1"))
-```
-The first two dependencies are the aforementioned JetBrains wrappers for react and react-dom, whereas the last two are the npm dependencies of the same modules. We will approach the npm imports in a future section.
+As a prerequisite for accessing the project, we need to have the Intellij IDEA installed, along with the Kotlin plugin (version 14.3.0 or above).
 
 ### Run the development server
 
@@ -100,19 +85,13 @@ _"Kotlin's support for Domain Specific Languages (DSLs), a feature provided to u
 Differently from the HTML tags, the HTML syntax that may be used in KotlinJS, looks as the following:
 
 ```kotlin
-   div {
+div {
     h3 {
-        +"John Doe: Building and breaking things"
+        +"Example header"
     }
-    img {
-       attrs {
-           src = "https://via.placeholder.com/640x360.png?text=Video+Player+Placeholder"
-       }
-    }
+    ...
 } 
 ```
-
-Surprisingly, we notice the addition of the + operator. This is due to the fact that each HTML component is a function that takes a lambda parameter. Basically, the + operator appends the following string to the enclosed element. 
 
 #### Typesafe CSS
 
@@ -128,11 +107,6 @@ styledDiv {
     }
     h3 {
         +"Example header"
-    }
-    img {
-        attrs {
-            src = "https://example_image.jpg"
-        }
     }
 }
 ```
@@ -157,7 +131,7 @@ class App  : RComponent<AppProps, AppState> {
 
 ### Transition to functional components
 
-Still, in these project, I have opted for the usage of functional components, which has been recently introduced in Kotlin/JS. This feature allows the developers to discard the class components, which are a lot more complicated and harder to maintain than the functional ones.
+Still, for this project, I have opted for the usage of functional components, which has been recently introduced in Kotlin/JS. This feature allows the developers to discard the class components, which are a lot more complicated and harder to maintain than the functional ones.
 
 The definition of a functional component is less complicated than the one of a class, it will only receive the props as parameter, and then the components' children may be added for rendering (we add them to the component's builder). The component's properties, may be received as well under the form of RProps (accept any props), or under the form of an interface.
 
@@ -191,13 +165,13 @@ In the event of needing an equivalent for a class' state, there is an option for
 
 ### _useState_() and _useEffect_() hooks
 
-As it can be seen in the previous section, the _useState_ hook is used the same as the one in React, its call will return a pair consisting of a reference to a state variable, and a function that is used to set the state. This call will also have the initial value of the state variable as a parameter, and in the event of a variable whose type may not be inferred from its value (such as Int) we will have to specify that variable's type, and if it is nullable.
-
-Differently from the state of a React class component, the update of those variables won't necessitate the call of the _setState_ lambda function.
+As it can be seen in the previous section, the _useState_ hook is used the same as the one in React, its call will return a pair consisting of a reference to a state variable, and a function that is used to set the state. Differently from the state of a React class component, the update of those variables won't necessitate the call of the _setState_ lambda function.
 
 In the upper example the declared state variables are currentAnime, watchedAnimes and unwatchedAnimes. The first one defines the anime that is currently selected by the user for info view, whereas the latest are the animes that have been marked as watched by the user, apart from those that haven't been used yet.
 
-Additionally, there is one more hook we can put to use, when we want to provide some data and cause side-effects to the respective component. This would be the _useEffect_() hook. This hook receives a list of variables as parameter, and whenever one of these variables is updated, the _useEffect_ will also be triggered. Its usage in this application is at the App component's rendering due to the fact that it has an empty list as a parameter, meaning it will be called only once. It will set the list of unwatched anime, with the anime list that will be retrieved from the API (details in the last section).
+Additionally, there is one more hook we can put to use, when we want to provide some data and cause side-effects to the respective component. This would be the _useEffect_() hook. This hook receives a list of variables as parameter, and whenever one of these variables is updated, the _useEffect_ will also be triggered. 
+
+Its usage in this application is at the App component's rendering due to the fact that it has an empty list as a parameter, meaning it will be called only once. It will set the list of unwatched anime, with the anime list that will be retrieved from the API (details in the last section).
 
 ## Import npm dependencies
 
@@ -216,10 +190,7 @@ As we want to use this module inside the Kotlin project, we need to create a sep
 @file:JsModule("react-youtube-lite")
 @file:JsNonModule
 
-package ReactUtils
-
-import react.*
-
+...
 @JsName("ReactYouTubeLite")
 external val reactPlayer: RClass<ReactYouTubeProps>
 
@@ -240,11 +211,7 @@ In order to make the application a lot more appealing, we may as well use this f
 @file:JsModule("@material-ui/core/Card")																																
 @file:JsNonModule
 
-package UIUtils
-
-import react.RClass
-import react.RProps
-
+...
 @JsName("default")
 external val AnimeCard : RClass<RProps>
 ```
@@ -297,6 +264,25 @@ Finally, this fetchAnimes() function will be called in the App component's mount
     }
 
 ```
+
+## Features
+
+- See list of anime:
+
+![Screenshot (579)](https://user-images.githubusercontent.com/49645354/120834213-64e78880-c56b-11eb-8edd-82e5dfbc3516.png)
+
+- Video player accessible when selecting anime card:
+
+![Screenshot (580)](https://user-images.githubusercontent.com/49645354/120834230-6a44d300-c56b-11eb-8b42-08c6f25cc2a8.png)
+
+- Sharing the video to social media:
+
+![Screenshot (581)](https://user-images.githubusercontent.com/49645354/120834320-86e10b00-c56b-11eb-91bb-55cce87c21ca.png)
+
+- Mark anime as seen:
+
+![Screenshot (583)](https://user-images.githubusercontent.com/49645354/120834380-9bbd9e80-c56b-11eb-9991-e268573e34a9.png)
+
 
 ### References
 
