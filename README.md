@@ -66,7 +66,7 @@ Firstly, we would need a HTML page in which we would embed the JavaScript file t
 </html>
 ```
 
-Therefore, in the main() function of our app, we would have to integrate all the children (or wrappers of those), into the root div of our HTML page.
+Therefore, inside the main() function of our app, we would have to integrate all the children (or wrappers of those), into the root div of our HTML page.
 
 ```kotlin
 fun main() {
@@ -79,7 +79,7 @@ In this example, we are adding as a child only one component, namely App, that w
 
 ### Writing components 
 
-The React components defined with Kotlin/JS, may be defined as follows:
+The React components written with Kotlin/JS, may be defined as follows:
 
 ```kotlin
 import react.*
@@ -91,12 +91,113 @@ class App : RComponent<RProps, RState>() {
     }
 }
 ```
-There is a class defined with the name App that will extend the RComponent class of our JetBrains react wrapper. This will have to override the render() function of the RBuilder. Inside that function, we may add any other children that the App component should contain.
+The App component is a class extending the RComponent class of our JetBrains react wrapper. App will have to override the render() function of the RBuilder. Inside that function, we may add any other children that the App component should contain, be it HTML or other React components.
 
 #### Typesafe HTML
 
+_"Kotlin's support for Domain Specific Languages (DSLs), a feature provided to us through kotlin-react, allows us to describe a markup language like HTML using a syntax that is easy to read (and hopefully also to write) for those familiar with HTML."_
+
+Differently from the HTML tags, the HTML syntax that may be used in KotlinJS, looks as the following:
+
+```kotlin
+   div {
+    h3 {
+        +"John Doe: Building and breaking things"
+    }
+    img {
+       attrs {
+           src = "https://via.placeholder.com/640x360.png?text=Video+Player+Placeholder"
+       }
+    }
+} 
+```
+
+Surprisingly, we notice the addition of the + operator. This is due to the fact that each HTML component is a function that takes a lambda parameter. Basically, the + operator appends the following string to the enclosed element. 
+
+#### Typesafe CSS
+
+There is also a wrapper for the styled-components of React, namely, kotlin-styled, which allows users to also stylize their HTML components.
+Differently from writing the stylesheets for every HTML component, the CSS syntax will now be:
+
+```kotlin
+styledDiv {
+    css {
+        position = Position.absolute
+        top = 15.px
+        right = 15.px
+    }
+    h3 {
+        +"Example header"
+    }
+    img {
+        attrs {
+            src = "https://example_image.jpg"
+        }
+    }
+}
+```
+### Props and State
+
+Similarly to the React class components, they allow the passing of props, and keeping an internal state. These may be simply reffered to as RProps and RState, when creating the component class, or we may create interfaces for these, as to know exactly what props we are expecting and what state variables we'd be using in these components. 
+
+```kotlin
+external interface AppProps : RProps {
+    ...
+}
+external interface AppState: RState {
+    ...
+}
+
+class App  : RComponent<AppProps, AppState> {
+    override fun RBuilder.render(){
+        ...
+    }
+}
+```
+
 ### Transition to functional components
+
+Still, in these project, I have opted for the usage of functional components, which has been recently introduced in Kotlin/JS. This feature allows the developers to discard the class components, which are a lot more complicated and harder to maintain than the functional ones.
+
+The definition of a functional component is less complicated than the one of a class, it will only receive the props as parameter, and then the components' children may be added for rendering (we add them to the component's builder). The component's properties, may be received as well under the form of RProps (accept any props), or under the form of an interface.
+
+```kotlin
+
+val App = functionalComponent<RProps>  {
+    val (currentAnime, setCurrentAnime) = useState<Anime?>(null)
+    val (unwatchedAnimes, setUnwatchedAnimes) = useState<List<Anime>>(listOf())
+    val (watchedAnimes, setWatchedAnimes) = useState<List<Anime>>(listOf())
+
+    useEffect(emptyList()) {
+        MainScope().launch {
+            val animes = fetchAnimes()
+            setUnwatchedAnimes(animes)
+        }
+    }
+
+    div {
+        Appbar {
+            Toolbar {
+                Typography {
+                    attrs.asDynamic().variant = "h6"
+                    +"Welcome to our page!"
+                }
+            }
+        }
+    ...
+```
+
+In the event of needing an equivalent for a class' state, there is an option for this, under the form of the _useState_() hook.
+
 ### _useState_() and _useEffect_() hooks
+
+As it can be seen in the previous section, the _useState_ hook is used the same as the one in React, its call will return a pair consisting of a reference to a state variable, and a function that is used to set the state. This call will also have the initial value of the state variable as a parameter, and in the event of a variable whose type may not be inferred from its value (such as Int) we will have to specify that variable's type, and if it is nullable.
+
+Differently from the state of a React class component, the update of those variables won't necessitate the call of the _setState_ lambda function.
+
+In the upper example the declared state variables are currentAnime, watchedAnimes and unwatchedAnimes. The first one defines the anime that is currently selected by the user for info view, whereas the latest are the animes that have been marked as watched by the user, apart from those that haven't been used yet.
+
+Additionally, there is one more hook we can put to use, when we want to provide some data and cause side-effects to the respective component. This would be the _useEffect_() hook. This hook receives a list of variables as parameter, and whenever one of these variables is updated, the _useEffect_ will also be triggered. Its usage in this application is at the App component's rendering due to the fact that it has an empty list as a parameter, meaning it will be called only once. It will set the list of unwatched anime, with the anime list that will be retrieved from the API (details in the last section).
 
 ## Import npm dependencies
 
@@ -198,3 +299,6 @@ Finally, this fetchAnimes() function will be called in the App component's mount
 ```
 
 ### References
+
+- https://kotlinlang.org/docs/js-get-started.html
+- https://kotlinlang.org/docs/js-hands-ons.html
