@@ -267,19 +267,19 @@ Finally, this fetchAnimes() function will be called in the App component's mount
 
 ## Features
 
-- See list of anime:
+- See list of anime
 
 ![Screenshot (579)](https://user-images.githubusercontent.com/49645354/120834213-64e78880-c56b-11eb-8edd-82e5dfbc3516.png)
 
-- Video player accessible when selecting anime card:
+- Video player accessible when selecting anime card
 
 ![Screenshot (580)](https://user-images.githubusercontent.com/49645354/120834230-6a44d300-c56b-11eb-8b42-08c6f25cc2a8.png)
 
-- Sharing the video to social media:
+- Sharing the video to social media
 
 ![Screenshot (581)](https://user-images.githubusercontent.com/49645354/120834320-86e10b00-c56b-11eb-91bb-55cce87c21ca.png)
 
-- Mark anime as seen:
+- Mark anime as seen
 
 ![Screenshot (583)](https://user-images.githubusercontent.com/49645354/120834380-9bbd9e80-c56b-11eb-9991-e268573e34a9.png)
 
