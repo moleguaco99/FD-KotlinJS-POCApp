@@ -5,18 +5,17 @@ import UIUtils.CardAction
 import UIUtils.Typography
 import kotlinx.css.*
 import react.*
-import react.dom.*
 import styled.css
 import styled.styledDiv
 import styled.styledImg
 
-external interface VideoListProps : RProps {
+external interface AnimeListProps : RProps {
     var animes: List<Anime>
     var selectedAnime: Anime?
     var onSelectAnime: (Anime) -> Unit
 }
 
-val VideoList = functionalComponent<VideoListProps> { props ->
+val AnimeList = functionalComponent<AnimeListProps> { props ->
     styledDiv {
         css{
             display = Display.flex
@@ -41,8 +40,7 @@ val VideoList = functionalComponent<VideoListProps> { props ->
                                     overflow = Overflow.hidden
                                 }
                                 attrs {
-                                    src =
-                                        "${anime.imageUrl}"
+                                    src = anime.imageUrl
                                 }
                             }
                             Typography {
@@ -57,8 +55,8 @@ val VideoList = functionalComponent<VideoListProps> { props ->
     }
 }
 
-fun RBuilder.videoList(handler: VideoListProps.() -> Unit): ReactElement {
-    return child(VideoList) {
+fun RBuilder.animeList(handler: AnimeListProps.() -> Unit): ReactElement {
+    return child(AnimeList) {
         this.attrs(handler)
     }
 }

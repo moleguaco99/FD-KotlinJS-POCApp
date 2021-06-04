@@ -51,7 +51,7 @@ val App = functionalComponent<RProps>  {
                     +"Please try some of our best!"
                 }
 
-                videoList {
+                animeList {
                     animes = unwatchedAnimes
                     selectedAnime = currentAnime
                     onSelectAnime = { anime ->
@@ -68,7 +68,7 @@ val App = functionalComponent<RProps>  {
                     }
                     +"Watched anime"
                 }
-                videoList {
+                animeList {
                     animes = watchedAnimes
                     selectedAnime = currentAnime
                     onSelectAnime = { anime ->
@@ -103,6 +103,5 @@ suspend fun fetchAnimes(): List<Anime> = coroutineScope {
 
 suspend fun fetchAnime(id: Int): Anime {
     val response = window.fetch("http://192.168.0.101:5000/comics/$id").await().json().await()
-    console.log(response)
     return response as Anime
 }
