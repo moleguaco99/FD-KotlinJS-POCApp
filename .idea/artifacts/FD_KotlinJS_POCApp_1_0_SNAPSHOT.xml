@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="FD-KotlinJS-POCApp-1.0-SNAPSHOT">
+    <output-path>C:\Users\Dragos\FD-KotlinJS-POCApp\build\libs</output-path>
+    <root id="archive" name="FD-KotlinJS-POCApp-1.0-SNAPSHOT.jar">
+      <element id="module-output" name="FD-KotlinJS-POCApp.main" />
+    </root>
+  </artifact>
+</component>
